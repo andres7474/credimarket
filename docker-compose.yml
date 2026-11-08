@@ -1,0 +1,180 @@
+# CrediMarket: 4 microservicios + frontend + infraestructura (PostgreSQL, RabbitMQ, Redis, MLflow).
+# Antes del primer arranque genere los secretos:  ./scripts/init-env.sh   (Windows: .\scripts\init-env.ps1)
+# Arranque:  docker compose up -d --build
+name: credimarket
+
+x-servicio: &servicio
+  restart: unless-stopped
+  environment: &entorno-comun
+    JWT_SECRET: ${JWT_SECRET:?Ejecute scripts/init-env para generar .env}
+    CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080}
+    RABBITMQ_URL: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672/%2F
+    MAX_REINTENTOS: ${MAX_REINTENTOS:-3}
+    DB_HOST: postgres
+    DB_PORT: "5432"
+    LOG_LEVEL: ${LOG_LEVEL:-INFO}
+
+services:
+  # ------------------------------------------------------------------ infraestructura
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Ejecute scripts/init-env}
+      PRODUCTOS_DB_PASSWORD: ${PRODUCTOS_DB_PASSWORD}
+      CLIENTES_DB_PASSWORD: ${CLIENTES_DB_PASSWORD}
+      PRESTAMOS_DB_PASSWORD: ${PRESTAMOS_DB_PASSWORD}
+      INVENTARIO_DB_PASSWORD: ${INVENTARIO_DB_PASSWORD}
+    volumes:
+      - pg_datos:/var/lib/postgresql/data
+      - ./infra/postgres:/docker-entrypoint-initdb.d:ro
+    ports: ["127.0.0.1:5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 20
+
+  rabbitmq:
+    image: rabbitmq:4.1-management-alpine
+    hostname: credimarket-rabbit          # fija el nombre del nodo para que el volumen se reutilice
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?Ejecute scripts/init-env}
+    volumes:
+      - rabbitmq_datos:/var/lib/rabbitmq
+    ports:
+      - "127.0.0.1:5672:5672"     # AMQP (scripts de prueba)
+      - "127.0.0.1:15672:15672"   # consola de administración
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      retries: 20
+
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped
+    # Solo caché: sin persistencia y con límite de memoria + política LRU.
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "64mb",
+              "--maxmemory-policy", "allkeys-lru"]
+    ports: ["127.0.0.1:6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 10
+
+  mlflow:
+    build: ./mlops
+    restart: unless-stopped
+    # Historial en carpeta del repositorio (bind mount): los experimentos se conservan y se versionan.
+    command: >
+      mlflow server --host 0.0.0.0 --port 5000
+      --backend-store-uri sqlite:////mlflow/datos/mlflow.db
+      --serve-artifacts --artifacts-destination /mlflow/datos/artifacts
+      --allowed-hosts localhost,localhost:5000,127.0.0.1,127.0.0.1:5000,mlflow,mlflow:5000
+      --workers 1
+    volumes:
+      - ./mlops/mlflow:/mlflow/datos
+    ports: ["127.0.0.1:5000:5000"]
+
+  # ------------------------------------------------------------------ microservicios
+  productos:
+    <<: *servicio
+    build: { context: ., dockerfile: services/productos/Dockerfile }
+    environment:
+      <<: *entorno-comun
+      DB_NAME: productos_db
+      DB_USER: productos_app
+      DB_PASSWORD: ${PRODUCTOS_DB_PASSWORD}
+      REDIS_URL: redis://redis:6379/0
+      CACHE_TTL_SEGUNDOS: ${CACHE_TTL_SEGUNDOS:-60}
+    ports: ["8001:8000"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_started }     # si Redis cae, Productos sigue respondiendo desde la BD
+
+  clientes:
+    <<: *servicio
+    build: { context: ., dockerfile: services/clientes/Dockerfile }
+    environment:
+      <<: *entorno-comun
+      DB_NAME: clientes_db
+      DB_USER: clientes_app
+      DB_PASSWORD: ${CLIENTES_DB_PASSWORD}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@credimarket.co}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Ejecute scripts/init-env}
+      DEMO_CLIENTE_PASSWORD: ${DEMO_CLIENTE_PASSWORD}
+      SESION_MINUTOS: ${SESION_MINUTOS:-30}
+    ports: ["8002:8000"]
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  prestamos:
+    <<: *servicio
+    build: { context: ., dockerfile: services/prestamos/Dockerfile }
+    environment:
+      <<: *entorno-comun
+      DB_NAME: prestamos_db
+      DB_USER: prestamos_app
+      DB_PASSWORD: ${PRESTAMOS_DB_PASSWORD}
+      PRODUCTOS_URL: http://productos:8000
+      CLIENTES_URL: http://clientes:8000
+      MODELOS_DIR: /models
+      MLFLOW_PUBLIC_URL: ${MLFLOW_PUBLIC_URL:-http://localhost:5000}
+      PENDIENTE_TIMEOUT_SEGUNDOS: ${PENDIENTE_TIMEOUT_SEGUNDOS:-600}
+      MONTO_MIN_COP: ${MONTO_MIN_COP:-300000}
+      MONTO_MAX_COP: ${MONTO_MAX_COP:-15000000}
+    volumes:
+      - ./models:/models:ro          # versión activa = models/activo.json (promoción explícita)
+    ports: ["8003:8000"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+      productos: { condition: service_started }
+      clientes: { condition: service_started }
+
+  inventario:
+    <<: *servicio
+    build: { context: ., dockerfile: services/inventario/Dockerfile }
+    environment:
+      <<: *entorno-comun
+      DB_NAME: inventario_db
+      DB_USER: inventario_app
+      DB_PASSWORD: ${INVENTARIO_DB_PASSWORD}
+      PRODUCTOS_URL: http://productos:8000
+      RESERVA_TTL_SEGUNDOS: ${RESERVA_TTL_SEGUNDOS:-1800}
+    ports: ["8004:8000"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+
+  # ------------------------------------------------------------------ frontend
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    environment:
+      PRODUCTOS_API: ${PRODUCTOS_PUBLIC_URL:-http://localhost:8001}
+      CLIENTES_API: ${CLIENTES_PUBLIC_URL:-http://localhost:8002}
+      PRESTAMOS_API: ${PRESTAMOS_PUBLIC_URL:-http://localhost:8003}
+      INVENTARIO_API: ${INVENTARIO_PUBLIC_URL:-http://localhost:8004}
+      MLFLOW_URL: ${MLFLOW_PUBLIC_URL:-http://localhost:5000}
+      RABBITMQ_UI_URL: http://localhost:15672
+    ports: ["8080:80"]
+    depends_on: [productos, clientes, prestamos, inventario]
+
+  # ------------------------------------------------------------------ entrenamiento (offline, no es servicio)
+  # docker compose --profile entrenamiento run --rm entrenamiento python ml/preparar_datos.py
+  entrenamiento:
+    profiles: ["entrenamiento"]
+    build: { context: ., dockerfile: ml/Dockerfile }
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+    volumes:
+      - ./:/repo
+    working_dir: /repo
+    depends_on: [mlflow]
+
+volumes:
+  pg_datos:
+  rabbitmq_datos:

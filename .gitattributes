@@ -1,0 +1,9 @@
+# Los scripts que se ejecutan dentro de contenedores Linux deben conservar finales de línea LF en Windows.
+*.sh text eol=lf
+*.py text eol=lf
+*.sql text eol=lf
+Dockerfile text eol=lf
+*.conf text eol=lf
+*.png binary
+*.joblib binary
+*.db binary

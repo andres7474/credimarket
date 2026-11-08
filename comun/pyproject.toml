@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "credimarket-comun"
+version = "1.0.0"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi==0.162.2",
+  "uvicorn==0.54.0",
+  "psycopg[binary]==3.3.8",
+  "psycopg-pool==3.3.3",
+  "pika==1.4.4",
+  "PyJWT==2.15.0",
+  "httpx==0.28.1",
+]
+
+[tool.setuptools]
+packages = ["credimarket_comun"]
