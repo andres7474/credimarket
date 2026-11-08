@@ -1,0 +1,717 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "CrediMarket \u00b7 Clientes",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/health": {
+            "get": {
+                "summary": "Health",
+                "operationId": "health_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ready": {
+            "get": {
+                "summary": "Ready",
+                "operationId": "ready_ready_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "summary": "Login",
+                "operationId": "login_auth_login_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/registro": {
+            "post": {
+                "summary": "Registro",
+                "operationId": "registro_auth_registro_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Registro"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/clientes/me": {
+            "get": {
+                "summary": "Mi Perfil",
+                "operationId": "mi_perfil_clientes_me_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Editar Mi Perfil",
+                "operationId": "editar_mi_perfil_clientes_me_put",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EdicionCliente"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/clientes": {
+            "get": {
+                "summary": "Listar",
+                "operationId": "listar_clientes_get",
+                "parameters": [
+                    {
+                        "name": "buscar",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Buscar"
+                        }
+                    },
+                    {
+                        "name": "limite",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 200,
+                            "minimum": 1,
+                            "default": 50,
+                            "title": "Limite"
+                        }
+                    },
+                    {
+                        "name": "desde",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "default": 0,
+                            "title": "Desde"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/clientes/{cliente_id}": {
+            "get": {
+                "summary": "Detalle",
+                "operationId": "detalle_clientes__cliente_id__get",
+                "parameters": [
+                    {
+                        "name": "cliente_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Cliente Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Editar",
+                "operationId": "editar_clientes__cliente_id__put",
+                "parameters": [
+                    {
+                        "name": "cliente_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Cliente Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EdicionCliente"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/clientes/{cliente_id}/activo": {
+            "patch": {
+                "summary": "Cambiar Activo",
+                "operationId": "cambiar_activo_clientes__cliente_id__activo_patch",
+                "parameters": [
+                    {
+                        "name": "cliente_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Cliente Id"
+                        }
+                    },
+                    {
+                        "name": "activo",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean",
+                            "title": "Activo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/clientes/importar": {
+            "post": {
+                "summary": "Importar Csv",
+                "operationId": "importar_csv_clientes_importar_post",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_importar_csv_clientes_importar_post"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/clientes-importaciones": {
+            "get": {
+                "summary": "Historial Importaciones",
+                "operationId": "historial_importaciones_clientes_importaciones_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/internos/clientes/{cliente_id}": {
+            "get": {
+                "summary": "Interno",
+                "description": "Datos que Pr\u00e9stamos necesita para evaluar riesgo. Solo para llamadas entre servicios.",
+                "operationId": "interno_internos_clientes__cliente_id__get",
+                "parameters": [
+                    {
+                        "name": "cliente_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Cliente Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Body_importar_csv_clientes_importar_post": {
+                "properties": {
+                    "archivo": {
+                        "type": "string",
+                        "contentMediaType": "application/octet-stream",
+                        "title": "Archivo"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "archivo"
+                ],
+                "title": "Body_importar_csv_clientes_importar_post"
+            },
+            "EdicionCliente": {
+                "properties": {
+                    "ingresos_mensuales_cop": {
+                        "type": "integer",
+                        "maximum": 100000000.0,
+                        "minimum": 0.0,
+                        "title": "Ingresos Mensuales Cop"
+                    },
+                    "obligaciones_mensuales_cop": {
+                        "type": "integer",
+                        "maximum": 100000000.0,
+                        "minimum": 0.0,
+                        "title": "Obligaciones Mensuales Cop"
+                    },
+                    "tipo_empleo": {
+                        "type": "string",
+                        "enum": [
+                            "dependiente",
+                            "independiente",
+                            "temporal"
+                        ],
+                        "title": "Tipo Empleo"
+                    },
+                    "antiguedad_laboral_meses": {
+                        "type": "number",
+                        "maximum": 600.0,
+                        "minimum": 0.0,
+                        "title": "Antiguedad Laboral Meses"
+                    },
+                    "meses_historial_crediticio": {
+                        "type": "number",
+                        "maximum": 600.0,
+                        "minimum": 0.0,
+                        "title": "Meses Historial Crediticio"
+                    },
+                    "creditos_previos": {
+                        "type": "integer",
+                        "maximum": 100.0,
+                        "minimum": 0.0,
+                        "title": "Creditos Previos"
+                    },
+                    "atrasos_previos_30d": {
+                        "type": "integer",
+                        "maximum": 100.0,
+                        "minimum": 0.0,
+                        "title": "Atrasos Previos 30D"
+                    },
+                    "porcentaje_pago_puntual": {
+                        "anyOf": [
+                            {
+                                "type": "number",
+                                "maximum": 100.0,
+                                "minimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Porcentaje Pago Puntual"
+                    },
+                    "nombre": {
+                        "type": "string",
+                        "maxLength": 120,
+                        "minLength": 2,
+                        "title": "Nombre"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "ingresos_mensuales_cop",
+                    "obligaciones_mensuales_cop",
+                    "tipo_empleo",
+                    "antiguedad_laboral_meses",
+                    "meses_historial_crediticio",
+                    "creditos_previos",
+                    "atrasos_previos_30d",
+                    "nombre"
+                ],
+                "title": "EdicionCliente"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "Login": {
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "title": "Password"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "title": "Login"
+            },
+            "Registro": {
+                "properties": {
+                    "ingresos_mensuales_cop": {
+                        "type": "integer",
+                        "maximum": 100000000.0,
+                        "minimum": 0.0,
+                        "title": "Ingresos Mensuales Cop"
+                    },
+                    "obligaciones_mensuales_cop": {
+                        "type": "integer",
+                        "maximum": 100000000.0,
+                        "minimum": 0.0,
+                        "title": "Obligaciones Mensuales Cop"
+                    },
+                    "tipo_empleo": {
+                        "type": "string",
+                        "enum": [
+                            "dependiente",
+                            "independiente",
+                            "temporal"
+                        ],
+                        "title": "Tipo Empleo"
+                    },
+                    "antiguedad_laboral_meses": {
+                        "type": "number",
+                        "maximum": 600.0,
+                        "minimum": 0.0,
+                        "title": "Antiguedad Laboral Meses"
+                    },
+                    "meses_historial_crediticio": {
+                        "type": "number",
+                        "maximum": 600.0,
+                        "minimum": 0.0,
+                        "title": "Meses Historial Crediticio"
+                    },
+                    "creditos_previos": {
+                        "type": "integer",
+                        "maximum": 100.0,
+                        "minimum": 0.0,
+                        "title": "Creditos Previos"
+                    },
+                    "atrasos_previos_30d": {
+                        "type": "integer",
+                        "maximum": 100.0,
+                        "minimum": 0.0,
+                        "title": "Atrasos Previos 30D"
+                    },
+                    "porcentaje_pago_puntual": {
+                        "anyOf": [
+                            {
+                                "type": "number",
+                                "maximum": 100.0,
+                                "minimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Porcentaje Pago Puntual"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "maxLength": 128,
+                        "minLength": 8,
+                        "title": "Password"
+                    },
+                    "nombre": {
+                        "type": "string",
+                        "maxLength": 120,
+                        "minLength": 2,
+                        "title": "Nombre"
+                    },
+                    "documento": {
+                        "type": "string",
+                        "pattern": "^[0-9]{6,12}$",
+                        "title": "Documento"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "ingresos_mensuales_cop",
+                    "obligaciones_mensuales_cop",
+                    "tipo_empleo",
+                    "antiguedad_laboral_meses",
+                    "meses_historial_crediticio",
+                    "creditos_previos",
+                    "atrasos_previos_30d",
+                    "email",
+                    "password",
+                    "nombre",
+                    "documento"
+                ],
+                "title": "Registro"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    },
+                    "input": {
+                        "title": "Input"
+                    },
+                    "ctx": {
+                        "type": "object",
+                        "title": "Context"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}

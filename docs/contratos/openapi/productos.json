@@ -1,0 +1,618 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "CrediMarket \u00b7 Productos",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/health": {
+            "get": {
+                "summary": "Health",
+                "operationId": "health_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ready": {
+            "get": {
+                "summary": "Ready",
+                "operationId": "ready_ready_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/productos": {
+            "get": {
+                "summary": "Listar",
+                "operationId": "listar_productos_get",
+                "parameters": [
+                    {
+                        "name": "incluir_inactivos",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false,
+                            "title": "Incluir Inactivos"
+                        }
+                    },
+                    {
+                        "name": "categoria",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Categoria"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Crear",
+                "operationId": "crear_productos_post",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductoNuevo"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/productos/{producto_id}": {
+            "get": {
+                "summary": "Detalle",
+                "description": "Cache-aside: Redis primero; si falla o no est\u00e1, BD y se guarda con TTL.",
+                "operationId": "detalle_productos__producto_id__get",
+                "parameters": [
+                    {
+                        "name": "producto_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Producto Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Actualizar",
+                "operationId": "actualizar_productos__producto_id__put",
+                "parameters": [
+                    {
+                        "name": "producto_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Producto Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductoCambio"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Desactivar",
+                "operationId": "desactivar_productos__producto_id__delete",
+                "parameters": [
+                    {
+                        "name": "producto_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Producto Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/internos/productos/{producto_id}/cotizacion": {
+            "get": {
+                "summary": "Cotizacion",
+                "description": "Cotizaci\u00f3n vigente le\u00edda de la FUENTE DE VERDAD (BD), nunca de la cach\u00e9.",
+                "operationId": "cotizacion_internos_productos__producto_id__cotizacion_get",
+                "parameters": [
+                    {
+                        "name": "producto_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Producto Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/productos/{producto_id}/reactivar": {
+            "post": {
+                "summary": "Reactivar",
+                "operationId": "reactivar_productos__producto_id__reactivar_post",
+                "parameters": [
+                    {
+                        "name": "producto_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Producto Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/cache/metricas": {
+            "get": {
+                "summary": "Metricas",
+                "operationId": "metricas_cache_metricas_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/cache/metricas/reiniciar": {
+            "post": {
+                "summary": "Reiniciar Metricas",
+                "operationId": "reiniciar_metricas_cache_metricas_reiniciar_post",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/cache/productos/{producto_id}": {
+            "get": {
+                "summary": "Estado Clave",
+                "description": "Muestra si la clave existe y su TTL restante (para demostrar expiraci\u00f3n).",
+                "operationId": "estado_clave_cache_productos__producto_id__get",
+                "parameters": [
+                    {
+                        "name": "producto_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Producto Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Vaciar Clave",
+                "description": "Borra la entrada de cach\u00e9 (demostraci\u00f3n de 'Redis vac\u00edo'); la siguiente lectura ser\u00e1 MISS.",
+                "operationId": "vaciar_clave_cache_productos__producto_id__delete",
+                "parameters": [
+                    {
+                        "name": "producto_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Producto Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "ProductoCambio": {
+                "properties": {
+                    "nombre": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "maxLength": 120,
+                                "minLength": 2
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Nombre"
+                    },
+                    "descripcion": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "maxLength": 500
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Descripcion"
+                    },
+                    "categoria": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "enum": [
+                                    "computadores",
+                                    "celulares",
+                                    "tablets",
+                                    "accesorios",
+                                    "otros"
+                                ]
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Categoria"
+                    },
+                    "precio": {
+                        "anyOf": [
+                            {
+                                "type": "number",
+                                "maximum": 100000000.0,
+                                "exclusiveMinimum": 0.0
+                            },
+                            {
+                                "type": "string",
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,2}0*$"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Precio"
+                    },
+                    "version_esperada": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Version Esperada",
+                        "description": "Control de concurrencia optimista"
+                    }
+                },
+                "type": "object",
+                "title": "ProductoCambio"
+            },
+            "ProductoNuevo": {
+                "properties": {
+                    "sku": {
+                        "type": "string",
+                        "maxLength": 40,
+                        "minLength": 3,
+                        "title": "Sku"
+                    },
+                    "nombre": {
+                        "type": "string",
+                        "maxLength": 120,
+                        "minLength": 2,
+                        "title": "Nombre"
+                    },
+                    "descripcion": {
+                        "type": "string",
+                        "maxLength": 500,
+                        "title": "Descripcion",
+                        "default": ""
+                    },
+                    "categoria": {
+                        "type": "string",
+                        "enum": [
+                            "computadores",
+                            "celulares",
+                            "tablets",
+                            "accesorios",
+                            "otros"
+                        ],
+                        "title": "Categoria"
+                    },
+                    "precio": {
+                        "anyOf": [
+                            {
+                                "type": "number",
+                                "maximum": 100000000.0,
+                                "exclusiveMinimum": 0.0
+                            },
+                            {
+                                "type": "string",
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,2}0*$"
+                            }
+                        ],
+                        "title": "Precio"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "sku",
+                    "nombre",
+                    "categoria",
+                    "precio"
+                ],
+                "title": "ProductoNuevo"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    },
+                    "input": {
+                        "title": "Input"
+                    },
+                    "ctx": {
+                        "type": "object",
+                        "title": "Context"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}

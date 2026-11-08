@@ -1,0 +1,14 @@
+{
+  "type": "ReservaLiberada",
+  "payload": {
+    "producto_id": 6,
+    "cantidad_liberada": 1,
+    "estado_reserva_previo": "RESERVADA"
+  },
+  "event_id": "e725d6b5-9e81-48e4-b9a6-56e8c51d8726",
+  "producer": "inventario",
+  "occurred_at": "2026-11-07T22:36:24.034+00:00",
+  "prestamo_id": "3497dd11-cca6-44d2-a29b-92665949d420",
+  "correlation_id": "ef8a9fc0-0669-440c-860e-ca250e47a24b",
+  "schema_version": 1
+}

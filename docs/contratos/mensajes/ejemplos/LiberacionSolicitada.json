@@ -1,0 +1,14 @@
+{
+  "type": "LiberacionSolicitada",
+  "payload": {
+    "motivo": "cancelacion",
+    "cantidad": 1,
+    "producto_id": 6
+  },
+  "event_id": "1519de90-cca3-40f0-bbcf-e498c21a52cf",
+  "producer": "prestamos",
+  "occurred_at": "2026-11-07T22:36:23.962+00:00",
+  "prestamo_id": "3497dd11-cca6-44d2-a29b-92665949d420",
+  "correlation_id": "ef8a9fc0-0669-440c-860e-ca250e47a24b",
+  "schema_version": 1
+}

@@ -1,0 +1,15 @@
+{
+  "type": "InventarioReservado",
+  "payload": {
+    "cantidad": 1,
+    "expira_en": "2026-11-07T23:06:24.974776+00:00",
+    "reserva_id": "2fa2b7b2-8415-43df-b877-2be199b12b23",
+    "producto_id": 2
+  },
+  "event_id": "fcb79c7e-208c-4608-b5b3-cd7251749659",
+  "producer": "inventario",
+  "occurred_at": "2026-11-07T22:36:24.976+00:00",
+  "prestamo_id": "958a4059-6cef-4cb9-ae36-0dd913366421",
+  "correlation_id": "5d3091ff-9f7c-4744-9f8f-d1f9b7ac29cf",
+  "schema_version": 1
+}

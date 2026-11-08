@@ -1,0 +1,598 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "CrediMarket \u00b7 Pr\u00e9stamos",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/health": {
+            "get": {
+                "summary": "Health",
+                "operationId": "health_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ready": {
+            "get": {
+                "summary": "Ready",
+                "operationId": "ready_ready_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/prestamos": {
+            "post": {
+                "summary": "Solicitar",
+                "operationId": "solicitar_prestamos_post",
+                "parameters": [
+                    {
+                        "name": "Idempotency-Key",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "minLength": 8,
+                            "maxLength": 100,
+                            "title": "Idempotency-Key"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SolicitudPrestamo"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "Listar",
+                "operationId": "listar_prestamos_get",
+                "parameters": [
+                    {
+                        "name": "estado",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Estado"
+                        }
+                    },
+                    {
+                        "name": "limite",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 200,
+                            "minimum": 1,
+                            "default": 50,
+                            "title": "Limite"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/prestamos/{prestamo_id}": {
+            "get": {
+                "summary": "Detalle",
+                "operationId": "detalle_prestamos__prestamo_id__get",
+                "parameters": [
+                    {
+                        "name": "prestamo_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Prestamo Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/prestamos/{prestamo_id}/mensajes": {
+            "get": {
+                "summary": "Mensajes",
+                "description": "Trazabilidad: comandos publicados (outbox) y eventos recibidos (inbox) de un pr\u00e9stamo.",
+                "operationId": "mensajes_prestamos__prestamo_id__mensajes_get",
+                "parameters": [
+                    {
+                        "name": "prestamo_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Prestamo Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/prestamos/{prestamo_id}/cancelar": {
+            "post": {
+                "summary": "Cancelar",
+                "operationId": "cancelar_prestamos__prestamo_id__cancelar_post",
+                "parameters": [
+                    {
+                        "name": "prestamo_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Prestamo Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/prestamos/{prestamo_id}/entregar": {
+            "post": {
+                "summary": "Entregar",
+                "description": "Entrega simulada: se pide a Inventario confirmar la salida; COMPLETADA llega con SalidaConfirmada.",
+                "operationId": "entregar_prestamos__prestamo_id__entregar_post",
+                "parameters": [
+                    {
+                        "name": "prestamo_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Prestamo Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/riesgo/predict": {
+            "post": {
+                "summary": "Predecir",
+                "description": "Prueba el pipeline con caracter\u00edsticas v\u00e1lidas. No crea pr\u00e9stamos ni reserva inventario.",
+                "operationId": "predecir_riesgo_predict_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EntradaRiesgo"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/modelo/info": {
+            "get": {
+                "summary": "Modelo Info",
+                "operationId": "modelo_info_modelo_info_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/modelo/recargar": {
+            "post": {
+                "summary": "Recargar",
+                "description": "Recarga expl\u00edcita tras ml/promover.py (promoci\u00f3n o rollback).",
+                "operationId": "recargar_modelo_recargar_post",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/modelo/monitoreo": {
+            "get": {
+                "summary": "Monitoreo",
+                "description": "Volumen y tasa de decisiones por versi\u00f3n, y drift (PSI) de las entradas recientes frente a entrenamiento.",
+                "operationId": "monitoreo_modelo_monitoreo_get",
+                "parameters": [
+                    {
+                        "name": "ventana",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 5000,
+                            "minimum": 30,
+                            "default": 500,
+                            "title": "Ventana"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "EntradaRiesgo": {
+                "properties": {
+                    "ingresos_mensuales_cop": {
+                        "type": "number",
+                        "maximum": 100000000.0,
+                        "exclusiveMinimum": 0.0,
+                        "title": "Ingresos Mensuales Cop"
+                    },
+                    "obligaciones_mensuales_cop": {
+                        "type": "number",
+                        "maximum": 100000000.0,
+                        "minimum": 0.0,
+                        "title": "Obligaciones Mensuales Cop"
+                    },
+                    "tipo_empleo": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "enum": [
+                                    "dependiente",
+                                    "independiente",
+                                    "temporal"
+                                ]
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Tipo Empleo"
+                    },
+                    "antiguedad_laboral_meses": {
+                        "anyOf": [
+                            {
+                                "type": "number",
+                                "maximum": 600.0,
+                                "minimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Antiguedad Laboral Meses"
+                    },
+                    "meses_historial_crediticio": {
+                        "anyOf": [
+                            {
+                                "type": "number",
+                                "maximum": 600.0,
+                                "minimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meses Historial Crediticio"
+                    },
+                    "creditos_previos": {
+                        "type": "integer",
+                        "maximum": 100.0,
+                        "minimum": 0.0,
+                        "title": "Creditos Previos"
+                    },
+                    "atrasos_previos_30d": {
+                        "type": "integer",
+                        "maximum": 100.0,
+                        "minimum": 0.0,
+                        "title": "Atrasos Previos 30D"
+                    },
+                    "porcentaje_pago_puntual": {
+                        "anyOf": [
+                            {
+                                "type": "number",
+                                "maximum": 100.0,
+                                "minimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Porcentaje Pago Puntual"
+                    },
+                    "monto_solicitado_cop": {
+                        "type": "number",
+                        "maximum": 100000000.0,
+                        "exclusiveMinimum": 0.0,
+                        "title": "Monto Solicitado Cop"
+                    },
+                    "plazo_meses": {
+                        "type": "integer",
+                        "title": "Plazo Meses"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "ingresos_mensuales_cop",
+                    "obligaciones_mensuales_cop",
+                    "creditos_previos",
+                    "atrasos_previos_30d",
+                    "monto_solicitado_cop",
+                    "plazo_meses"
+                ],
+                "title": "EntradaRiesgo",
+                "description": "Caracter\u00edsticas de entrada (sin identificadores ni etiqueta)."
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "SolicitudPrestamo": {
+                "properties": {
+                    "producto_id": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0.0,
+                        "title": "Producto Id"
+                    },
+                    "cantidad": {
+                        "type": "integer",
+                        "maximum": 5.0,
+                        "minimum": 1.0,
+                        "title": "Cantidad"
+                    },
+                    "plazo_meses": {
+                        "type": "integer",
+                        "title": "Plazo Meses"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "producto_id",
+                    "cantidad",
+                    "plazo_meses"
+                ],
+                "title": "SolicitudPrestamo"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    },
+                    "input": {
+                        "title": "Input"
+                    },
+                    "ctx": {
+                        "type": "object",
+                        "title": "Context"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}

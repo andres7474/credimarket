@@ -1,0 +1,380 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://credimarket.local/contratos/mensaje.schema.json",
+  "title": "Mensaje CrediMarket (sobre común, schema_version 1)",
+  "description": "Todo comando y evento entre Préstamos e Inventario usa este sobre. El payload depende de type. Inventario no recibe información financiera del cliente. Los payloads admiten campos adicionales (evolución compatible); el sobre no.",
+  "type": "object",
+  "required": [
+    "event_id",
+    "type",
+    "schema_version",
+    "occurred_at",
+    "correlation_id",
+    "prestamo_id",
+    "payload"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Identificador único del mensaje; clave de deduplicación (mensajes_procesados)."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "ReservaSolicitada",
+        "LiberacionSolicitada",
+        "EntregaSolicitada",
+        "InventarioReservado",
+        "InventarioInsuficiente",
+        "ReservaLiberada",
+        "SalidaConfirmada",
+        "EntregaRechazada",
+        "ReservaVencida"
+      ]
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC ISO-8601 con milisegundos."
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Igual para todos los mensajes de una misma solicitud (se genera en POST /prestamos)."
+    },
+    "prestamo_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "producer": {
+      "type": "string",
+      "enum": [
+        "prestamos",
+        "inventario"
+      ]
+    },
+    "payload": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "ReservaSolicitada"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "producto_id": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "cantidad": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              }
+            },
+            "required": [
+              "producto_id",
+              "cantidad"
+            ],
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "LiberacionSolicitada"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "producto_id": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "cantidad": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "motivo": {
+                "type": "string",
+                "enum": [
+                  "cancelacion",
+                  "tiempo_agotado"
+                ]
+              }
+            },
+            "required": [
+              "producto_id",
+              "cantidad",
+              "motivo"
+            ],
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "EntregaSolicitada"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "reserva_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "producto_id": {
+                "type": "integer"
+              },
+              "cantidad": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "reserva_id",
+              "producto_id",
+              "cantidad"
+            ],
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "InventarioReservado"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "reserva_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "producto_id": {
+                "type": "integer"
+              },
+              "cantidad": {
+                "type": "integer"
+              },
+              "expira_en": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "reserva_id",
+              "producto_id",
+              "cantidad",
+              "expira_en"
+            ],
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "InventarioInsuficiente"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "producto_id": {
+                "type": "integer"
+              },
+              "cantidad": {
+                "type": "integer"
+              },
+              "disponible": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "unidades disponibles al momento de intentar"
+              }
+            },
+            "required": [
+              "producto_id",
+              "cantidad",
+              "disponible"
+            ],
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "ReservaLiberada"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "producto_id": {
+                "type": "integer"
+              },
+              "cantidad_liberada": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "0 si no había reserva activa"
+              },
+              "estado_reserva_previo": {
+                "type": "string",
+                "enum": [
+                  "RESERVADA",
+                  "RECHAZADA",
+                  "LIBERADA",
+                  "VENCIDA"
+                ]
+              }
+            },
+            "required": [
+              "producto_id",
+              "cantidad_liberada"
+            ],
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "SalidaConfirmada"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "reserva_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "producto_id": {
+                "type": "integer"
+              },
+              "cantidad": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "reserva_id",
+              "producto_id",
+              "cantidad"
+            ],
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "EntregaRechazada"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "motivo": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "motivo"
+            ],
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "ReservaVencida"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "reserva_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "producto_id": {
+                "type": "integer"
+              },
+              "cantidad": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "reserva_id",
+              "producto_id",
+              "cantidad"
+            ],
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

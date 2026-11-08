@@ -1,0 +1,12 @@
+{
+  "type": "EntregaRechazada",
+  "payload": {
+    "motivo": "no hay reserva activa (estado: LIBERADA)"
+  },
+  "event_id": "ef22353d-22f6-4202-90b1-06f98947f171",
+  "producer": "inventario",
+  "occurred_at": "2026-11-07T22:36:21.297+00:00",
+  "prestamo_id": "245cfd13-96f7-41f2-9622-44b32ea07d9b",
+  "correlation_id": "104b8a32-76a1-4fe6-a726-35d565599727",
+  "schema_version": 1
+}

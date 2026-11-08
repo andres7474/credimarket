@@ -1,0 +1,14 @@
+{
+  "type": "InventarioInsuficiente",
+  "payload": {
+    "cantidad": 1,
+    "disponible": 0,
+    "producto_id": 6
+  },
+  "event_id": "5234fa14-dc34-47d1-83fb-7d0d8fd6d482",
+  "producer": "inventario",
+  "occurred_at": "2026-11-07T22:36:23.729+00:00",
+  "prestamo_id": "12629da9-a7a8-406b-83a2-37639a5d58e0",
+  "correlation_id": "7848e815-59fa-4a1a-b228-31a9889239c6",
+  "schema_version": 1
+}

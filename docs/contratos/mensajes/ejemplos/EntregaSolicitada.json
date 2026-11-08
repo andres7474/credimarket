@@ -1,0 +1,14 @@
+{
+  "type": "EntregaSolicitada",
+  "payload": {
+    "cantidad": 1,
+    "reserva_id": "4e7e8b11-8973-4fcc-b2f5-ddd826c2676c",
+    "producto_id": 1
+  },
+  "event_id": "a0fd9c8a-9fb1-4ace-b517-fbe76fc8a255",
+  "producer": "prestamos",
+  "occurred_at": "2026-11-07T22:36:21.203+00:00",
+  "prestamo_id": "245cfd13-96f7-41f2-9622-44b32ea07d9b",
+  "correlation_id": "104b8a32-76a1-4fe6-a726-35d565599727",
+  "schema_version": 1
+}
