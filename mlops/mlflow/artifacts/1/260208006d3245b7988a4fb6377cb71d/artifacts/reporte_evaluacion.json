@@ -1,0 +1,41 @@
+{
+  "corrida": "hgb-lr0.05",
+  "algoritmo": "hist_gradient_boosting",
+  "justificacion": "Boosting con árboles poco profundos y tasa de aprendizaje baja.",
+  "entrenamiento": {
+    "precision_1": 0.7257462686567164,
+    "recall_1": 0.35363636363636364,
+    "f1_1": 0.47555012224938875,
+    "roc_auc": 0.7838018181818182,
+    "average_precision": 0.6454407828375262,
+    "brier": 0.16544905756228123,
+    "tasa_rechazo": 0.14888888888888888,
+    "tn": 4706,
+    "fp": 294,
+    "fn": 1422,
+    "tp": 778,
+    "costo_por_solicitud": 0.6333333333333333
+  },
+  "validacion": {
+    "precision_1": 0.5964912280701754,
+    "recall_1": 0.2779291553133515,
+    "f1_1": 0.379182156133829,
+    "roc_auc": 0.6917840705764595,
+    "average_precision": 0.518988206524967,
+    "brier": 0.18952411060692706,
+    "tasa_rechazo": 0.1425,
+    "tn": 1528,
+    "fp": 138,
+    "fn": 530,
+    "tp": 204,
+    "costo_por_solicitud": 0.72
+  },
+  "cv_ap": [
+    0.5197695431234008,
+    0.5346914684416734,
+    0.5307844776655113,
+    0.5262285512841182,
+    0.5476305174583139
+  ],
+  "duracion_segundos": 1.9623196125030518
+}

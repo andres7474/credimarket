@@ -1,0 +1,10 @@
+cliente_id,ingresos_mensuales_cop,obligaciones_mensuales_cop,tipo_empleo,antiguedad_laboral_meses,meses_historial_crediticio,creditos_previos,atrasos_previos_30d,porcentaje_pago_puntual
+CLI-ERR-0001,2500000,400000,dependiente,24,36,2,0,95.5
+CLI-ERR-0002,,300000,dependiente,12,20,1,0,90
+CLI-ERR-0003,3100000,500000,astronauta,10,15,1,0,88
+CLI-ERR-0004,abc,500000,independiente,10,15,1,0,88
+CLI-ERR-0005,2800000,600000,temporal,6,10,1.5,0,70
+CLI-ERR-0006,2900000,700000,dependiente,48,60,3,1,140
+,2000000,300000,dependiente,12,24,1,0,90
+CLI-ERR-0001,2600000,400000,dependiente,24,36,2,0,95.5
+CLI-ERR-0009,4100000,900000,independiente,30,,0,0,

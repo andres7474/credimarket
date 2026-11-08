@@ -1,0 +1,41 @@
+{
+  "corrida": "arbol-d4",
+  "algoritmo": "decision_tree",
+  "justificacion": "Árbol poco profundo: interpretable, poca varianza.",
+  "entrenamiento": {
+    "precision_1": 0.6076923076923076,
+    "recall_1": 0.2872727272727273,
+    "f1_1": 0.39012345679012345,
+    "roc_auc": 0.6985396818181818,
+    "average_precision": 0.5063782271457882,
+    "brier": 0.18642585217771562,
+    "tasa_rechazo": 0.14444444444444443,
+    "tn": 4592,
+    "fp": 408,
+    "fn": 1568,
+    "tp": 632,
+    "costo_por_solicitud": 0.71
+  },
+  "validacion": {
+    "precision_1": 0.5608308605341247,
+    "recall_1": 0.2574931880108992,
+    "f1_1": 0.35294117647058826,
+    "roc_auc": 0.6774727602212547,
+    "average_precision": 0.47618154065272755,
+    "brier": 0.19220413717968993,
+    "tasa_rechazo": 0.14041666666666666,
+    "tn": 1518,
+    "fp": 148,
+    "fn": 545,
+    "tp": 189,
+    "costo_por_solicitud": 0.7429166666666667
+  },
+  "cv_ap": [
+    0.4729381191674982,
+    0.4687005552591559,
+    0.44758237845513704,
+    0.4784690924988234,
+    0.47794930983623146
+  ],
+  "duracion_segundos": 0.3938915729522705
+}

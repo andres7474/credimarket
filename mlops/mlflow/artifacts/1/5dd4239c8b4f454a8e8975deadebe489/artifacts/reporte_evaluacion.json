@@ -1,0 +1,41 @@
+{
+  "corrida": "rf-d8",
+  "algoritmo": "random_forest",
+  "justificacion": "Bosque con profundidad acotada: reduce la varianza de un árbol.",
+  "entrenamiento": {
+    "precision_1": 0.8376288659793815,
+    "recall_1": 0.29545454545454547,
+    "f1_1": 0.4368279569892473,
+    "roc_auc": 0.8123434545454544,
+    "average_precision": 0.6924938484667829,
+    "brier": 0.16382771697448825,
+    "tasa_rechazo": 0.10777777777777778,
+    "tn": 4874,
+    "fp": 126,
+    "fn": 1550,
+    "tp": 650,
+    "costo_por_solicitud": 0.6633333333333333
+  },
+  "validacion": {
+    "precision_1": 0.6223175965665236,
+    "recall_1": 0.19754768392370572,
+    "f1_1": 0.2998965873836608,
+    "roc_auc": 0.6950862088704692,
+    "average_precision": 0.5192748251075001,
+    "brier": 0.18935797119968778,
+    "tasa_rechazo": 0.09708333333333333,
+    "tn": 1578,
+    "fp": 88,
+    "fn": 589,
+    "tp": 145,
+    "costo_por_solicitud": 0.7729166666666667
+  },
+  "cv_ap": [
+    0.5220582158830672,
+    0.5283946330439839,
+    0.5356330990072111,
+    0.5214412972578637,
+    0.528874380453903
+  ],
+  "duracion_segundos": 7.986641883850098
+}

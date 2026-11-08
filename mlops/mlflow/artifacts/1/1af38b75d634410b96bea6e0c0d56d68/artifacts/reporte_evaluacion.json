@@ -1,0 +1,41 @@
+{
+  "corrida": "arbol-d8",
+  "algoritmo": "decision_tree",
+  "justificacion": "Árbol más profundo para capturar interacciones; hojas mínimas contra sobreajuste.",
+  "entrenamiento": {
+    "precision_1": 0.6754250386398764,
+    "recall_1": 0.3972727272727273,
+    "f1_1": 0.5002862049227247,
+    "roc_auc": 0.7731218636363638,
+    "average_precision": 0.6230077495151658,
+    "brier": 0.16660212234457067,
+    "tasa_rechazo": 0.17972222222222223,
+    "tn": 4580,
+    "fp": 420,
+    "fn": 1326,
+    "tp": 874,
+    "costo_por_solicitud": 0.6108333333333333
+  },
+  "validacion": {
+    "precision_1": 0.5023364485981309,
+    "recall_1": 0.29291553133514986,
+    "f1_1": 0.37005163511187605,
+    "roc_auc": 0.6389085606994841,
+    "average_precision": 0.4589471644598779,
+    "brier": 0.2085772021859513,
+    "tasa_rechazo": 0.17833333333333334,
+    "tn": 1453,
+    "fp": 213,
+    "fn": 519,
+    "tp": 215,
+    "costo_por_solicitud": 0.7375
+  },
+  "cv_ap": [
+    0.454156043739764,
+    0.4515163363113078,
+    0.4590934863788903,
+    0.45833044863160693,
+    0.467444925268773
+  ],
+  "duracion_segundos": 0.5132248401641846
+}

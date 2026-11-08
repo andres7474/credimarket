@@ -1,0 +1,41 @@
+{
+  "corrida": "rf-d14",
+  "algoritmo": "random_forest",
+  "justificacion": "Bosque más profundo para comparar sesgo/varianza frente a rf-d8.",
+  "entrenamiento": {
+    "precision_1": 0.9630541871921182,
+    "recall_1": 0.5331818181818182,
+    "f1_1": 0.6863662960795787,
+    "roc_auc": 0.9613942727272727,
+    "average_precision": 0.9204545158427732,
+    "brier": 0.11474702758200508,
+    "tasa_rechazo": 0.16916666666666666,
+    "tn": 4955,
+    "fp": 45,
+    "fn": 1027,
+    "tp": 1173,
+    "costo_por_solicitud": 0.43416666666666665
+  },
+  "validacion": {
+    "precision_1": 0.604982206405694,
+    "recall_1": 0.23160762942779292,
+    "f1_1": 0.33497536945812806,
+    "roc_auc": 0.6896979500246965,
+    "average_precision": 0.5135534056723758,
+    "brier": 0.19011921399688186,
+    "tasa_rechazo": 0.11708333333333333,
+    "tn": 1555,
+    "fp": 111,
+    "fn": 564,
+    "tp": 170,
+    "costo_por_solicitud": 0.75125
+  },
+  "cv_ap": [
+    0.5203609363342662,
+    0.5235739015404055,
+    0.5282482301953846,
+    0.520385928186054,
+    0.5312932632531553
+  ],
+  "duracion_segundos": 9.053635358810425
+}

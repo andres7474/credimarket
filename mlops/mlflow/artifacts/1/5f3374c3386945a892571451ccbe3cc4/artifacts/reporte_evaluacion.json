@@ -1,0 +1,41 @@
+{
+  "corrida": "logreg-C0.1-balanced",
+  "algoritmo": "logistic_regression",
+  "justificacion": "Más regularización y pesos balanceados por el desbalance 70/30.",
+  "entrenamiento": {
+    "precision_1": 0.47173761339846476,
+    "recall_1": 0.6145454545454545,
+    "f1_1": 0.533754441373865,
+    "roc_auc": 0.7173815454545456,
+    "average_precision": 0.5512343523941368,
+    "brier": 0.211608623739518,
+    "tasa_rechazo": 0.39805555555555555,
+    "tn": 3486,
+    "fp": 1514,
+    "fn": 848,
+    "tp": 1352,
+    "costo_por_solicitud": 0.5636111111111111
+  },
+  "validacion": {
+    "precision_1": 0.4725956566701138,
+    "recall_1": 0.6226158038147139,
+    "f1_1": 0.5373309817754263,
+    "roc_auc": 0.7037798770734452,
+    "average_precision": 0.5295329519082508,
+    "brier": 0.21569840374469276,
+    "tasa_rechazo": 0.40291666666666665,
+    "tn": 1156,
+    "fp": 510,
+    "fn": 277,
+    "tp": 457,
+    "costo_por_solicitud": 0.55875
+  },
+  "cv_ap": [
+    0.5447206912630451,
+    0.5619741392668784,
+    0.5433773651468015,
+    0.533042466516156,
+    0.5521291620523875
+  ],
+  "duracion_segundos": 0.3067972660064697
+}

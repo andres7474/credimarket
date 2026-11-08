@@ -1,0 +1,39 @@
+{
+  "version_datos": "prestamos_entrenamiento-v1",
+  "archivo": "data/prestamos_entrenamiento.csv",
+  "sha256": "c6cdc437c3aecc9116bc8b978df421d5a7600634c1ad7d6f82e58222a2446ecd",
+  "semilla": 42,
+  "estrategia_particion": "estratificada por incumplimiento_90d, 60/20/20, por solicitud (1 solicitud por cliente)",
+  "particiones": {
+    "entrenamiento": {
+      "filas": 7200,
+      "proporcion_clase_1": 0.3056
+    },
+    "validacion": {
+      "filas": 2400,
+      "proporcion_clase_1": 0.3058
+    },
+    "prueba": {
+      "filas": 2400,
+      "proporcion_clase_1": 0.3054
+    }
+  },
+  "validacion": {
+    "filas": 12000,
+    "columnas": 15,
+    "faltantes": {
+      "tipo_empleo": 93,
+      "antiguedad_laboral_meses": 91,
+      "meses_historial_crediticio": 97,
+      "porcentaje_pago_puntual": 2473
+    },
+    "duplicados_solicitud_id": 0,
+    "duplicados_cliente_id": 0,
+    "filas_duplicadas_sin_ids": 0,
+    "tasa_mensual_valores_unicos": [
+      0.018
+    ],
+    "proporcion_clase_1": 0.3056,
+    "problemas": []
+  }
+}

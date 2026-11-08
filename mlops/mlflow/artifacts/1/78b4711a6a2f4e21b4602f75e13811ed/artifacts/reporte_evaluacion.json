@@ -1,0 +1,41 @@
+{
+  "corrida": "logreg-C1",
+  "algoritmo": "logistic_regression",
+  "justificacion": "Modelo lineal de referencia con regularización estándar.",
+  "entrenamiento": {
+    "precision_1": 0.6388308977035491,
+    "recall_1": 0.2781818181818182,
+    "f1_1": 0.3875870804306523,
+    "roc_auc": 0.7172424545454545,
+    "average_precision": 0.551367109881458,
+    "brier": 0.1828914495389837,
+    "tasa_rechazo": 0.13305555555555557,
+    "tn": 4654,
+    "fp": 346,
+    "fn": 1588,
+    "tp": 612,
+    "costo_por_solicitud": 0.7097222222222223
+  },
+  "validacion": {
+    "precision_1": 0.6158730158730159,
+    "recall_1": 0.26430517711171664,
+    "f1_1": 0.36987607244995235,
+    "roc_auc": 0.7037038248541924,
+    "average_precision": 0.5299175980057794,
+    "brier": 0.1868251866361893,
+    "tasa_rechazo": 0.13125,
+    "tn": 1545,
+    "fp": 121,
+    "fn": 540,
+    "tp": 194,
+    "costo_por_solicitud": 0.7254166666666667
+  },
+  "cv_ap": [
+    0.5447359222641576,
+    0.5621502115738232,
+    0.5436836041022513,
+    0.5318360544082096,
+    0.551800270408775
+  ],
+  "duracion_segundos": 0.3065528869628906
+}

@@ -1,0 +1,9 @@
+{
+  "version": "v2",
+  "run_id": "5f3374c3386945a892571451ccbe3cc4",
+  "sha256_artefacto": "b672c2f26afe1aa7210681edd7cdbf5069b0323ea1d09d95450eadd63fc097bf",
+  "anterior": "v1",
+  "motivo": "prueba de aceptación: restaurar",
+  "promovido_por": "Apard",
+  "promovido_en": "2026-11-08T13:16:07+00:00"
+}

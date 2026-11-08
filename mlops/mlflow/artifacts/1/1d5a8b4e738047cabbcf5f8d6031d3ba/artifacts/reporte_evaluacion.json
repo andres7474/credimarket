@@ -1,0 +1,41 @@
+{
+  "corrida": "baseline-prior",
+  "algoritmo": "dummy",
+  "justificacion": "Baseline trivial: predice la proporción de la clase 1 para todos.",
+  "entrenamiento": {
+    "precision_1": 0.0,
+    "recall_1": 0.0,
+    "f1_1": 0.0,
+    "roc_auc": 0.5,
+    "average_precision": 0.3055555555555556,
+    "brier": 0.21219135802469136,
+    "tasa_rechazo": 0.0,
+    "tn": 5000,
+    "fp": 0,
+    "fn": 2200,
+    "tp": 0,
+    "costo_por_solicitud": 0.9166666666666666
+  },
+  "validacion": {
+    "precision_1": 0.0,
+    "recall_1": 0.0,
+    "f1_1": 0.0,
+    "roc_auc": 0.5,
+    "average_precision": 0.30583333333333335,
+    "brier": 0.21229938271604942,
+    "tasa_rechazo": 0.0,
+    "tn": 1666,
+    "fp": 0,
+    "fn": 734,
+    "tp": 0,
+    "costo_por_solicitud": 0.9175
+  },
+  "cv_ap": [
+    0.3055555555555556,
+    0.3055555555555556,
+    0.3055555555555556,
+    0.3055555555555556,
+    0.3055555555555556
+  ],
+  "duracion_segundos": 0.28307533264160156
+}
