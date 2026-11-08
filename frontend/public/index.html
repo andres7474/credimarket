@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CrediMarket</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23134e4a'/><text x='16' y='22' font-size='16' text-anchor='middle' fill='white' font-family='sans-serif'>C</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="barra">
+    <a class="marca" href="#/catalogo"><span class="logo">C</span><span>CrediMarket</span></a>
+    <button class="menu-movil" id="menuMovil" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <nav id="nav" class="nav"></nav>
+    <div id="sesion" class="sesion"></div>
+  </header>
+  <div id="aviso" class="aviso" role="status" aria-live="polite" hidden></div>
+  <main id="vista" class="vista" tabindex="-1"></main>
+  <footer class="pie">Proyecto académico. Las decisiones de riesgo usan datos sintéticos y no son recomendaciones financieras.</footer>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
