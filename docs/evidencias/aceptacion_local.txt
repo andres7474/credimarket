@@ -1,0 +1,95 @@
+# Ejecución local de scripts/pruebas/aceptacion.py — 2026-11-07 17:40 -05
+# Entorno: servicios con uvicorn + PostgreSQL 16, RabbitMQ 3.12, Redis nativos (equivalente a docker compose)
+
+
+[1] Riesgo favorable con existencias: reserva, aprobación y entrega
+     ✓ HTTP 202 y PENDIENTE_INVENTARIO
+     ✓ APROBADA solo después de la reserva confirmada
+     ✓ una unidad pasó a reservado
+     ✓ COMPLETADA tras SalidaConfirmada
+     ✓ existencias coherentes: disponible 17 -> 16
+
+[2] Solicitud rechazada por riesgo: decisión y versión registradas, sin reserva
+     ✓ RECHAZADA inmediatamente (HTTP 201)
+     ✓ probabilidad 0.987 >= umbral 0.45 con modelo v2
+     ✓ Inventario no tiene ninguna reserva para este préstamo
+
+[3] Riesgo favorable sin existencias: CANCELADA_SIN_STOCK, sin inventario negativo
+     ✓ CANCELADA_SIN_STOCK
+     ✓ existencias no negativas: 0
+
+[4] Dos solicitudes simultáneas por la última unidad: solo una obtiene la reserva
+     ✓ resultados: ['APROBADA', 'CANCELADA_SIN_STOCK']
+     ✓ disponible quedó en 0, nunca negativo
+     ✓ se cancela el ganador para dejar la unidad lista para repetir
+
+[5] Misma petición y mismo evento repetidos: un préstamo y un único efecto
+     ✓ 5 peticiones concurrentes con la misma Idempotency-Key -> 1 préstamo (ceb5bebc-4b4f-4c1e-a5cc-f256ea949fa6)
+     ✓ misma clave con contenido distinto -> HTTP 409
+     ✓ una sola reserva en Inventario
+     ✓ el stock se reservó una sola vez
+     ✓ Préstamos registró el evento InventarioReservado una sola vez
+
+[6] Caída del consumidor y del broker: recuperación sin pérdidas ni duplicados
+     ✓ con Inventario caído la solicitud se acepta (202) y queda pendiente
+     ✓ sigue PENDIENTE_INVENTARIO (comando en la cola)
+     ✓ al volver Inventario se aprueba
+     ✓ con RabbitMQ caído la solicitud se guarda (outbox) y responde 202
+     ✓ al volver RabbitMQ el outbox publica y el préstamo se aprueba
+     ✓ una reserva por préstamo, sin duplicados
+
+[7] Cancelación y evento tardío: reserva liberada y préstamo no reactivado
+     ✓ pasa a CANCELACION_PENDIENTE mientras se libera
+     ✓ CANCELADA tras ReservaLiberada
+     ✓ la unidad volvió a disponible
+     ✓ el InventarioReservado tardío no reactiva el préstamo
+     ✓ el historial registra el evento como ignorado
+
+[8] Redis: miss, hit, expiración, invalidación y caída
+     ✓ primera consulta MISS, segunda HIT
+     ✓ la clave productos:v1:2 tiene TTL 60 s
+     ✓ tras el TTL la entrada expiró (MISS)
+     ✓ con Redis caído responde desde la BD en 4 ms
+     ✓ al volver Redis la caché se recupera
+     métricas: {"ttl_segundos": 60, "redis_disponible": true, "hits": 2, "misses": 3, "errores_redis": 1, "consultas_sin_redis": 1, "tasa_aciertos": 0.4, "invalidaciones": 1, "invalidaciones_fallidas": 0, "latencia_ms": {"hit": {"n": 2, "p50": 0.287, "p95": 0.323}, "miss": {"n": 3, "p50": 1.458, "p95": 1.999}, "sin_cache": {"n": 1, "p50": 1.399, "p95": 1.399}}}
+
+[9] Precio modificado: invalidación y monto con la cotización vigente
+     ✓ tras el cambio la caché se invalidó: precio 1,600,000 -> 1,700,000
+     ✓ el préstamo usó el precio vigente y la versión 4 de la cotización
+
+[10] Modelo exportado vs. API: predicciones equivalentes y versión identificable
+     ✓ 25 solicitudes: diferencia máxima 4.56e-07 con la versión v2 (run 5f3374c3386945a892571451ccbe3cc4)
+
+[11] Promoción y rollback entre dos versiones con trazabilidad
+     ✓ v2 -> v1 (run 5dd4239c8b4f454a8e8975deadebe489)
+     ✓ la misma entrada da 0.585 con v2 y 0.290 con v1
+     ✓ v1 -> v2 (run 5f3374c3386945a892571451ccbe3cc4)
+     ✓ historial_promociones.jsonl tiene 8 cambios registrados
+
+[12] Importar dos veces el mismo CSV no duplica clientes
+     primera: insertados=0 actualizados=0 sin_cambios=200 rechazados=0
+     ✓ segunda: 0 insertados, 200 sin cambios
+     ✓ archivo con errores: 7 filas rechazadas con detalle por fila
+
+[13] Un cliente no puede ver préstamos ajenos
+     ✓ Carla consulta un préstamo de Bruno -> HTTP 403
+     ✓ y tampoco puede cancelarlo -> HTTP 403
+     ✓ un cliente no puede usar el endpoint interno /riesgo/predict -> HTTP 403
+
+[16] Entradas inválidas y sesión vencida (nivel API)
+     ✓ formulario inválido -> 422 con 2 errores
+     ✓ token vencido -> 401 sesion_vencida
+
+[17] Dead letter: mensajes inválidos o que fallan siempre terminan en el DLQ
+     ✓ DLQ: 2 -> 4 (inválido directo; fallido tras reintentos)
+
+Resumen: 1:OK 2:OK 3:OK 4:OK 5:OK 6:OK 7:OK 8:OK 9:OK 10:OK 11:OK 12:OK 13:OK 16:OK 17:OK
+
+# Caso 18 ejecutado con RESERVA_TTL_SEGUNDOS=20:
+
+[18] Vencimiento de la reserva (requiere RESERVA_TTL_SEGUNDOS <= 120 en .env)
+     ✓ sin entrega, a los 20 s el préstamo pasó a VENCIDA (La reserva venció sin entrega)
+     ✓ las unidades volvieron a disponible
+     ✓ la reserva quedó VENCIDA en Inventario
+
+Resumen: 18:OK

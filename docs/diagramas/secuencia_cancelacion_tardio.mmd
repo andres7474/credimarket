@@ -1,0 +1,18 @@
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant P as Préstamos
+    participant MQ as RabbitMQ
+    participant I as Inventario
+
+    C->>P: POST /prestamos/{id}/cancelar (estado APROBADA)
+    P->>P: APROBADA → CANCELACION_PENDIENTE + outbox(LiberacionSolicitada)
+    P-->>C: 200 {estado: CANCELACION_PENDIENTE}
+    P->>MQ: LiberacionSolicitada
+    MQ->>I: LiberacionSolicitada
+    I->>I: disponible += n · reservado -= n · reserva LIBERADA
+    I->>MQ: ReservaLiberada
+    MQ->>P: ReservaLiberada → CANCELADA
+    MQ-->>P: InventarioReservado tardío (otro event_id)
+    P->>P: CANCELADA + InventarioReservado no es transición válida → historial aplicado=false
+    Note over P: El préstamo sigue CANCELADO y el evento queda registrado como ignorado

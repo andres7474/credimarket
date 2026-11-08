@@ -1,0 +1,19 @@
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant P as Préstamos
+    participant MQ as RabbitMQ
+    participant I as Inventario
+
+    C->>P: POST /prestamos (perfil de alto riesgo)
+    P->>P: P(incumplimiento) ≥ umbral → DESFAVORABLE
+    P-->>C: 201 {estado: RECHAZADA, probabilidad, umbral, model_version}
+    Note over P,I: No se publica ningún comando: Inventario nunca se entera
+
+    C->>P: POST /prestamos (riesgo favorable, producto sin unidades)
+    P-->>C: 202 PENDIENTE_INVENTARIO
+    P->>MQ: ReservaSolicitada
+    MQ->>I: ReservaSolicitada
+    I->>I: UPDATE ... WHERE disponible >= n → 0 filas · reserva RECHAZADA
+    I->>MQ: InventarioInsuficiente {disponible}
+    MQ->>P: InventarioInsuficiente → CANCELADA_SIN_STOCK

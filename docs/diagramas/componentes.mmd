@@ -1,0 +1,40 @@
+flowchart LR
+    subgraph Navegador
+        FE["Frontend SPA<br/>(nginx :8080)"]
+    end
+
+    subgraph Servicios["Microservicios (FastAPI)"]
+        PR["Productos :8001<br/>catálogo · precio · versión"]
+        CL["Clientes :8002<br/>registro · login JWT · CSV"]
+        PS["Préstamos :8003<br/>flujo · estados · modelo ML"]
+        IN["Inventario :8004<br/>existencias · reservas"]
+    end
+
+    subgraph Infra["Infraestructura"]
+        RD[("Redis<br/>caché catálogo")]
+        MQ{{"RabbitMQ<br/>comandos y eventos"}}
+        subgraph PG["PostgreSQL (1 instancia, 4 bases)"]
+            DBP[(productos_db)]
+            DBC[(clientes_db)]
+            DBL[(prestamos_db)]
+            DBI[(inventario_db)]
+        end
+        ML["MLflow :5000<br/>tracking + artefactos"]
+        MOD[/"models/vN + activo.json<br/>(pipeline exportado)"/]
+    end
+
+    FE -- "REST + JWT" --> PR & CL & PS & IN
+    PR --> DBP
+    PR -- "cache-aside" --> RD
+    CL --> DBC
+    PS --> DBL
+    IN --> DBI
+    PS -- "REST interno (token de servicio)<br/>cliente + cotización vigente" --> CL & PR
+    IN -- "REST interno: ¿existe el producto?" --> PR
+    PS -- "outbox → comandos" --> MQ
+    MQ -- "comandos" --> IN
+    IN -- "outbox → eventos" --> MQ
+    MQ -- "eventos" --> PS
+    PS -. "carga al iniciar / recargar" .-> MOD
+    TR["Entrenamiento offline<br/>ml/*.py"] -. "runs, métricas, artefactos" .-> ML
+    TR -. "exportar + promover" .-> MOD

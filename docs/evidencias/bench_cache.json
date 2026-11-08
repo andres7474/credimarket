@@ -1,0 +1,128 @@
+{
+  "fecha": "2026-11-07 17:27:18",
+  "peticiones": 3000,
+  "concurrencia": 16,
+  "productos": 7,
+  "A_cache_caliente": {
+    "n": 3000,
+    "p50_ms": 9.47,
+    "p95_ms": 18.52,
+    "p99_ms": 26.3,
+    "media_ms": 10.6,
+    "rps": 1472.4,
+    "respuestas": {
+      "200/HIT": 3000
+    }
+  },
+  "A_servidor": {
+    "ttl_segundos": 60,
+    "redis_disponible": true,
+    "hits": 3000,
+    "misses": 0,
+    "errores_redis": 0,
+    "consultas_sin_redis": 0,
+    "tasa_aciertos": 1.0,
+    "invalidaciones": 0,
+    "invalidaciones_fallidas": 0,
+    "latencia_ms": {
+      "hit": {
+        "n": 3000,
+        "p50": 0.166,
+        "p95": 2.172
+      },
+      "miss": {
+        "n": 0,
+        "p50": null,
+        "p95": null
+      },
+      "sin_cache": {
+        "n": 0,
+        "p50": null,
+        "p95": null
+      }
+    }
+  },
+  "B_fuente_de_verdad": {
+    "n": 3000,
+    "p50_ms": 24.29,
+    "p95_ms": 36.96,
+    "p99_ms": 43.2,
+    "media_ms": 24.67,
+    "rps": 638.5,
+    "respuestas": {
+      "200/-": 3000
+    }
+  },
+  "C_servidor": {
+    "ttl_segundos": 60,
+    "redis_disponible": true,
+    "hits": 2704,
+    "misses": 296,
+    "errores_redis": 0,
+    "consultas_sin_redis": 0,
+    "tasa_aciertos": 0.9013,
+    "invalidaciones": 210,
+    "invalidaciones_fallidas": 0,
+    "latencia_ms": {
+      "hit": {
+        "n": 2704,
+        "p50": 0.342,
+        "p95": 5.132
+      },
+      "miss": {
+        "n": 296,
+        "p50": 4.586,
+        "p95": 13.342
+      },
+      "sin_cache": {
+        "n": 0,
+        "p50": null,
+        "p95": null
+      }
+    }
+  },
+  "D_redis_caido": {
+    "n": 1000,
+    "p50_ms": 16.64,
+    "p95_ms": 29.94,
+    "p99_ms": 39.64,
+    "media_ms": 17.34,
+    "rps": 890.1,
+    "respuestas": {
+      "200/OMITIDA": 1000
+    }
+  },
+  "D_servidor": {
+    "ttl_segundos": 60,
+    "redis_disponible": false,
+    "hits": 0,
+    "misses": 0,
+    "errores_redis": 1,
+    "consultas_sin_redis": 1000,
+    "tasa_aciertos": null,
+    "invalidaciones": 0,
+    "invalidaciones_fallidas": 0,
+    "latencia_ms": {
+      "hit": {
+        "n": 0,
+        "p50": null,
+        "p95": null
+      },
+      "miss": {
+        "n": 0,
+        "p50": null,
+        "p95": null
+      },
+      "sin_cache": {
+        "n": 1000,
+        "p50": 2.908,
+        "p95": 9.569
+      }
+    }
+  },
+  "redis_memoria": {
+    "used_memory_human": "892.94K",
+    "used_memory_peak_human": "892.94K",
+    "maxmemory_policy": "noeviction"
+  }
+}

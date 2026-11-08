@@ -1,0 +1,36 @@
+sequenceDiagram
+    autonumber
+    actor C as Cliente (navegador)
+    participant P as Préstamos
+    participant CL as Clientes
+    participant PR as Productos
+    participant DB as prestamos_db
+    participant MQ as RabbitMQ
+    participant I as Inventario
+    participant DI as inventario_db
+
+    C->>P: POST /prestamos {producto, cantidad, plazo} + Idempotency-Key + JWT
+    P->>DB: ¿existe (cliente, clave)? → no
+    P->>CL: GET /internos/clientes/{id} (token servicio)
+    P->>PR: GET /internos/productos/{id}/cotizacion (lee PostgreSQL, no caché)
+    P->>P: monto = precio × cantidad · reglas · pipeline ML → P(incumplimiento)
+    P->>DB: BEGIN · INSERT préstamo PENDIENTE_INVENTARIO + idempotencia + historial + predicción + outbox(ReservaSolicitada) · COMMIT
+    P-->>C: 202 Accepted {id, estado: PENDIENTE_INVENTARIO}
+    P->>MQ: relay outbox → publish (confirm) credimarket.comandos / inventario.reservar
+    MQ->>I: ReservaSolicitada
+    I->>DI: BEGIN · INSERT mensajes_procesados · INSERT reserva · UPDATE disponible-=n WHERE disponible>=n · outbox(InventarioReservado) · COMMIT
+    I->>MQ: ack · relay → credimarket.eventos / inventario.reservado
+    MQ->>P: InventarioReservado
+    P->>DB: BEGIN · inbox · PENDIENTE_INVENTARIO → APROBADA · COMMIT · ack
+    loop polling cada 2 s
+        C->>P: GET /prestamos/{id}
+    end
+    Note over C,P: La interfaz pasa de “Pendiente de inventario” a “Aprobada”
+    actor A as Administrador
+    A->>P: POST /prestamos/{id}/entregar
+    P->>DB: APROBADA → ENTREGA_PENDIENTE + outbox(EntregaSolicitada)
+    P->>MQ: EntregaSolicitada
+    MQ->>I: EntregaSolicitada
+    I->>DI: reservado -= n · reserva CONFIRMADA · movimiento SALIDA · outbox(SalidaConfirmada)
+    I->>MQ: SalidaConfirmada
+    MQ->>P: SalidaConfirmada → COMPLETADA

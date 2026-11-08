@@ -1,0 +1,25 @@
+stateDiagram-v2
+    direction LR
+    [*] --> RECHAZADA: modelo DESFAVORABLE<br/>o regla de negocio
+    [*] --> PENDIENTE_INVENTARIO: riesgo FAVORABLE<br/>(se publica ReservaSolicitada, HTTP 202)
+
+    PENDIENTE_INVENTARIO --> APROBADA: InventarioReservado
+    PENDIENTE_INVENTARIO --> CANCELADA_SIN_STOCK: InventarioInsuficiente
+    PENDIENTE_INVENTARIO --> CANCELACION_PENDIENTE: cancelar (cliente/admin)<br/>o tiempo agotado (600 s)
+    PENDIENTE_INVENTARIO --> VENCIDA: ReservaVencida
+
+    APROBADA --> ENTREGA_PENDIENTE: entregar (admin)<br/>publica EntregaSolicitada
+    APROBADA --> CANCELACION_PENDIENTE: cancelar<br/>publica LiberacionSolicitada
+    APROBADA --> VENCIDA: ReservaVencida (1800 s)
+
+    ENTREGA_PENDIENTE --> COMPLETADA: SalidaConfirmada
+    ENTREGA_PENDIENTE --> VENCIDA: EntregaRechazada / ReservaVencida
+
+    CANCELACION_PENDIENTE --> CANCELADA: ReservaLiberada
+    CANCELACION_PENDIENTE --> CANCELADA: InventarioInsuficiente / ReservaVencida<br/>(no quedó reserva que liberar)
+
+    RECHAZADA --> [*]
+    CANCELADA_SIN_STOCK --> [*]
+    COMPLETADA --> [*]
+    CANCELADA --> [*]
+    VENCIDA --> [*]

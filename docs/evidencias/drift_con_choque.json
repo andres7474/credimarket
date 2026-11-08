@@ -1,0 +1,47 @@
+{
+  "lote": "con_choque",
+  "solicitudes": 200,
+  "tasa_desfavorable_lote": 0.975,
+  "drift": {
+    "ventana": 200,
+    "variables": {
+      "ingresos_mensuales_cop": {
+        "psi": 0.5101,
+        "alerta": "alta"
+      },
+      "obligaciones_mensuales_cop": {
+        "psi": 0.3401,
+        "alerta": "alta"
+      },
+      "antiguedad_laboral_meses": {
+        "psi": 0.1102,
+        "alerta": "moderada"
+      },
+      "meses_historial_crediticio": {
+        "psi": 0.0495,
+        "alerta": "estable"
+      },
+      "creditos_previos": {
+        "psi": 0.0087,
+        "alerta": "estable"
+      },
+      "atrasos_previos_30d": {
+        "psi": 5.4448,
+        "alerta": "alta"
+      },
+      "porcentaje_pago_puntual": {
+        "psi": 0.0582,
+        "alerta": "estable"
+      },
+      "monto_solicitado_cop": {
+        "psi": 0.5853,
+        "alerta": "alta"
+      },
+      "plazo_meses": {
+        "psi": 0.024,
+        "alerta": "estable"
+      }
+    },
+    "criterio": "PSI < 0,1 estable; 0,1-0,25 moderado; > 0,25 alto (revisar o reentrenar)"
+  }
+}

@@ -1,0 +1,8 @@
+sequenceDiagram
+    participant I as Inventario (vigilante cada 5 s)
+    participant MQ as RabbitMQ
+    participant P as Préstamos
+    I->>I: reservas RESERVADA con expira_en ≤ now() → devolver unidades, reserva VENCIDA, movimiento VENCIMIENTO
+    I->>MQ: ReservaVencida
+    MQ->>P: ReservaVencida
+    P->>P: APROBADA / ENTREGA_PENDIENTE → VENCIDA (un aprobado no conserva una reserva inexistente)

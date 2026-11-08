@@ -1,0 +1,19 @@
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant P as Préstamos
+    participant DB as prestamos_db
+    participant R as Relay outbox
+    participant MQ as RabbitMQ
+
+    Note over MQ: RabbitMQ detenido
+    C->>P: POST /prestamos
+    P->>DB: COMMIT préstamo + outbox(ReservaSolicitada, publicado_en = NULL)
+    P-->>C: 202 (la solicitud quedó confirmada en la BD)
+    loop cada 3 s
+        R->>MQ: conectar → falla, se reintenta
+    end
+    Note over MQ: RabbitMQ vuelve
+    R->>MQ: publish + confirm
+    R->>DB: UPDATE outbox SET publicado_en = now()
+    Note over R,DB: Si el proceso cae entre publish y UPDATE, el mensaje se publica otra vez<br/>y el consumidor lo descarta por event_id
